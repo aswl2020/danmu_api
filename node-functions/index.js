@@ -2,6 +2,20 @@ import { handleRequestWithTrace } from '../danmu_api/worker.js';
 
 export const onRequest = async (context) => {
   const { request, env } = context;
+    // ===== EdgeOne 域名归属验证文件 =====
+  try {
+    const incoming = new URL(request.url);
+    if (incoming.pathname.endsWith('/.well-known/teo-verification/as6jvrcnf8.txt')) {
+      return new Response('sv59nra7nt9e86r6sc1zhza3ohklknae', {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-store'
+        }
+      });
+    }
+  } catch (_) {}
+  // ===== 验证文件处理结束 =====
 
   // 获取协议和主机名，使用属性访问而非 get 方法
   const baseUrl = `https://localhost`;
